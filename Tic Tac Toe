@@ -1,0 +1,146 @@
+package tictactoe;
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        char[][] matrix = new char[3][3];
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                matrix[i][j] = ' ';
+            }
+        }
+
+        //----------------EMPTY TABLE---------------------
+        System.out.println("---------");
+
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.print("|");
+            System.out.println();
+        }
+        System.out.println("---------");
+
+        //--------------ENTER THE COORDINATES--------------
+        int x = 0;
+        int y = 0;
+
+        while (true) {
+            int countX = 0;
+            int countO = 0;
+
+            int countDiagonalDown = 0;
+            int countDiagonalUp = 0;
+            int countVertical = 0;
+            int countHorizontal = 0;
+
+            System.out.print("Enter the coordinates: ");
+            String coordinates = scanner.nextLine();
+
+            try {
+                String[] pieces = coordinates.split(" ");
+                x = Integer.parseInt(pieces[0]);
+                y = Integer.parseInt(pieces[1]);
+
+                int index1 = Math.abs(y - 3);
+                int index2 = Math.abs(x - 1);
+
+                if (x < 1 || y < 1 || x > 3 || y > 3) {
+                    System.out.println("Coordinates should be from 1 to 3!");
+                    continue;
+
+                } else if (matrix[index1][index2] == 'X' || matrix[index1][index2] == 'O') {
+                    System.out.println("This cell is occupied! Choose another one!");
+                    continue;
+                } else {
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 3; j++) {
+                            if (matrix[i][j] == 'X') {
+                                countX++;
+                            } else if (matrix[i][j] == 'O') {
+                                countO++;
+                            }
+                        }
+                    }
+
+                    if (countX - countO == 1) {
+                        matrix[index1][index2] = 'O';
+                        countO++;
+                    } else if (countX - countO == 0) {
+                        matrix[index1][index2] = 'X';
+                        countX++;
+                    }
+                }
+
+                System.out.println("---------");
+
+                for (int i = 0; i < 3; i++) {
+                    System.out.print("| ");
+                    for (int j = 0; j < 3; j++) {
+                        System.out.print(matrix[i][j] + " ");
+                    }
+                    System.out.print("|");
+                    System.out.println();
+                }
+                System.out.println("---------");
+
+                for (int i = 0; i < 1; i++) {
+                    for (int j = 0; j < 1; j++) {
+                        if (matrix[i][j] == matrix[i + 1][j + 1] && matrix[i][j] == matrix[i + 2][j + 2] &&
+                        (matrix[i][j] == 'X' || matrix[i][j] == 'O')) {
+                            countDiagonalDown++;
+                        }
+                    }
+                }
+
+                for (int i = 2; i < 3; i++) {
+                    for (int j = 0; j < 1; j++) {
+                        if (matrix[i][j] == matrix[i - 1][j + 1] && matrix[i][j] == matrix[i - 2][j + 2] &&
+                                (matrix[i][j] == 'X' || matrix[i][j] == 'O')){
+                            countDiagonalUp++;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 1; j++) {
+                        if (matrix[i][j] ==(matrix[i][j + 1]) && (matrix[i][j] == matrix[i][j + 2]) &&
+                                (matrix[i][j] == 'X' || matrix[i][j] == 'O')) {
+                            countVertical++;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < 1; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        if (matrix[i][j] == matrix[i + 1][j] && matrix[i][j] == matrix[i + 2][j] &&
+                                (matrix[i][j] == 'X' || matrix[i][j] == 'O')) {
+                            countHorizontal++;
+                        }
+                    }
+                }
+                if ((countDiagonalDown == 1 || countDiagonalUp == 1 || countVertical == 1 || countHorizontal == 1) &&
+                        (countX - countO == 1)) {
+                    System.out.println("X wins");
+                    break;
+                } else if ((countDiagonalDown == 1 || countDiagonalUp == 1 || countVertical == 1 || countHorizontal == 1) &&
+                        (countO - countX == 0)) {
+                    System.out.println("O wins");
+                    break;
+                } else if (countX + countO == 9) {
+                    System.out.println("Draw");
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("You should enter numbers!");
+                continue;
+            }
+        }
+    }
+}
